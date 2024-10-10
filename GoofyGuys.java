@@ -7,7 +7,9 @@ import javax.swing.*;
  * Onthoud Frame.repaint
  * 
  * @author Tim van Kollenburg
+ * @id
  * @author Lars Weeber
+ * @id 2109506
  * 
  */
 
