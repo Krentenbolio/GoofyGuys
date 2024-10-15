@@ -1,34 +1,27 @@
 import java.awt.*;
-import java.awt.image.*;
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.awt.event.*;
-
+import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
-
-/**
- * Onthoud Frame.repaint
- * 
- * @author Tim van Kollenburg
- * @id 2110105
- * @author Lars Weeber
- * @id 2109506
- * 
- */
 
 class Menu {
     void Instantiate() {
         JFrame frame = new JFrame();
-        frame.setTitle("Goofy Guys");
+        frame.setTitle("GoofyGuys");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize.width, screenSize.height);
         frame.setResizable(false);
-        frame.getContentPane().setBackground(Color.white);
-        frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new GoofyGuys().GoofyGuys());
+        GamePanel gamePanel = new GamePanel();
+        frame.add(gamePanel);
+
+        frame.setVisible(true);
     }
 
     public static void main(String[] args) {
@@ -36,22 +29,73 @@ class Menu {
     }
 }
 
-class GoofyGuys {
-    public JLabel Tank() {
-        JLabel character = new JLabel(new javax.swing.ImageIcon(getClass().getResource("character.png")));
-        return character;
+class GamePanel extends JPanel implements ActionListener {
+    private BufferedImage characterImage;
+    private double x = 200;
+    private double y = 200;
+    private double newX;
+    private double newY;
+    private double angle = 0;
+    private double speed = 10;
+    private int stopCloseMovement = 10;
+    private double scale = 0.2;
+
+    public GamePanel() {
+        try {
+            URL imageUrl = getClass().getResource("/character.png");
+            characterImage = ImageIO.read(imageUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Timer refresh = new Timer(16, this);
+        refresh.start();
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                newX = e.getX();
+                newY = e.getY();
+            }
+        });
+
+        setBackground(Color.white);
+        setFocusable(true);
     }
 
-    public JPanel GoofyGuys() {
-        JPanel goofyGuys = new JPanel();
-        // goofyGuys.setLayout();
-        goofyGuys.setBackground(Color.white);
-        goofyGuys.setSize(200, 200);
-        goofyGuys.setLocation(200, 200);
-        Border blackline = BorderFactory.createLineBorder(Color.black, 25);
-        goofyGuys.setBorder(blackline);
-        goofyGuys.setVisible(true);
-        goofyGuys.add(new GoofyGuys().Tank());
-        return goofyGuys;
+    private void moveTowardsTarget() {
+        int centerX = (int) (characterImage.getWidth() * scale / 2);
+        int centerY = (int) (characterImage.getHeight() * scale / 2);
+        double dx = newX - (x + centerX);
+        double dy = newY - (y + centerY);
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance > stopCloseMovement) {
+            angle = Math.atan2(dy, dx);
+            x += speed * Math.cos(angle);
+            y += speed * Math.sin(angle);
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        AffineTransform transform = new AffineTransform();
+
+        transform.translate(x, y);
+        transform.rotate(angle, characterImage.getWidth() * scale
+                / 2, characterImage.getHeight() * scale / 2);
+
+        // Apply scaling
+        transform.scale(scale, scale);
+        g2d.drawImage(characterImage, transform, this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        moveTowardsTarget();
+        repaint();
     }
 }
