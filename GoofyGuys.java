@@ -19,8 +19,8 @@ class Menu {
         JPanel panel = new JPanel();
         Color green = new Color(68, 158, 72);
         panel.setBackground(green);
-        panel.setSize(200, 200);
-        panel.setLocation(200, 200);
+        // panel.setSize(200, 200);
+        // panel.setLocation(200, 200);
         panel.setLayout(null);
         Border blackline = BorderFactory.createLineBorder(Color.black, 25);
         panel.setBorder(blackline);
@@ -90,15 +90,16 @@ class Target extends JLabel {
 }
 
 class Character extends JLabel implements ActionListener {
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private BufferedImage characterImage;
-    private double x = 1250;
-    private double y = 600;
+    private double x = 850;
+    private double y = 400;
     private double newX;
     private double newY;
     private double angle = 0;
     private double speed = 10;
     private int stopCloseMovement = 10;
-    private double scale = 0.2;
+    private double scale = 0.2 * (screenSize.width / 1920.000);
     private Timer refresh;
 
     public Character() {
@@ -169,9 +170,9 @@ class Character extends JLabel implements ActionListener {
     }
 
     private Rectangle[] walls = new Rectangle[] {
-            new Rectangle(100, 100, 200, 20), // Wall 1
-            new Rectangle(300, 200, 20, 200), // Wall 2
-            new Rectangle(500, 400, 200, 20) // Wall 3
+            new Rectangle(screenSize.width - 200, screenSize.height - 200, 200, 20), // Wall 1
+            new Rectangle(screenSize.width, screenSize.height, 20, 200), // Wall 2
+            new Rectangle(screenSize.width, screenSize.height, 200, 20) // Wall 3
     };
 
     private boolean checkCollision() {
@@ -187,9 +188,11 @@ class Character extends JLabel implements ActionListener {
     }
 
     private Rectangle getCharacterBounds() {
-        int width = characterImage.getWidth();
-        int height = characterImage.getHeight();
-        return new Rectangle((int) x, (int) y, width, height);
+        double width = characterImage.getWidth() * scale;
+        double height = characterImage.getHeight() * scale;
+        int width_int = (int) width;
+        int height_int = (int) height;
+        return new Rectangle((int) x, (int) y, width_int, height_int);
     }
 
 }
