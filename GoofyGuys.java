@@ -91,14 +91,15 @@ class Target extends JLabel {
 
 class Character extends JLabel implements ActionListener {
     private BufferedImage characterImage;
-    private double x = 250;
-    private double y = 250;
+    private double x = 1250;
+    private double y = 600;
     private double newX;
     private double newY;
     private double angle = 0;
     private double speed = 10;
     private int stopCloseMovement = 10;
     private double scale = 0.2;
+    private Timer refresh;
 
     public Character() {
         try {
@@ -108,7 +109,7 @@ class Character extends JLabel implements ActionListener {
             e.printStackTrace();
         }
 
-        Timer refresh = new Timer(16, this);
+        refresh = new Timer(16, this);
         refresh.start();
 
         addMouseMotionListener(new MouseMotionAdapter() {
@@ -134,6 +135,10 @@ class Character extends JLabel implements ActionListener {
             x += speed * Math.cos(angle);
             y += speed * Math.sin(angle);
         }
+        if (checkCollision()) {
+            System.out.println("Game Over! Character hit a wall.");
+            refresh.stop(); // Stop the game or reset
+        }
     }
 
     @Override
@@ -141,6 +146,10 @@ class Character extends JLabel implements ActionListener {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
+
+        for (Rectangle wall : walls) {
+            g2d.fill(wall);
+        }
 
         AffineTransform transform = new AffineTransform();
 
@@ -158,4 +167,29 @@ class Character extends JLabel implements ActionListener {
         moveTowardsTarget();
         repaint();
     }
+
+    private Rectangle[] walls = new Rectangle[] {
+            new Rectangle(100, 100, 200, 20), // Wall 1
+            new Rectangle(300, 200, 20, 200), // Wall 2
+            new Rectangle(500, 400, 200, 20) // Wall 3
+    };
+
+    private boolean checkCollision() {
+        Rectangle characterBounds = getCharacterBounds();
+
+        for (Rectangle wall : walls) {
+            if (characterBounds.intersects(wall)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Rectangle getCharacterBounds() {
+        int width = characterImage.getWidth();
+        int height = characterImage.getHeight();
+        return new Rectangle((int) x, (int) y, width, height);
+    }
+
 }
