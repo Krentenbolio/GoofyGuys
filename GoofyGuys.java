@@ -55,7 +55,7 @@ class Target extends JLabel {
     private double angle = 0;
     private double scale = 0.2;
 
-    /* */ public Target() {
+    public Target() {
         try {
             URL targetImageUrl = getClass().getResource("dummy.png");
             if (targetImageUrl == null) {
@@ -96,7 +96,7 @@ class Character extends JLabel implements ActionListener {
     private double y = 400;
     private double newX;
     private double newY;
-    private double angle = 0;
+    private double angle = 40;
     private double speed = 10;
     private int stopCloseMovement = 10;
     private double scale = 0.2 * (screenSize.width / 1920.000);
@@ -176,10 +176,10 @@ class Character extends JLabel implements ActionListener {
     };
 
     private boolean checkCollision() {
-        Rectangle characterBounds = getCharacterBounds();
+        Shape characterBounds = getTransformedCharacterBounds();
 
         for (Rectangle wall : walls) {
-            if (characterBounds.intersects(wall)) {
+            if (characterBounds.intersects(wall.getBounds2D())) {
                 return true;
             }
         }
@@ -187,12 +187,18 @@ class Character extends JLabel implements ActionListener {
         return false;
     }
 
-    private Rectangle getCharacterBounds() {
+    private Shape getTransformedCharacterBounds() {
         double width = characterImage.getWidth() * scale;
         double height = characterImage.getHeight() * scale;
         int width_int = (int) width;
         int height_int = (int) height;
-        return new Rectangle((int) x, (int) y, width_int, height_int);
+
+        Rectangle bounds = new Rectangle(0, 0, width_int, height_int);
+        AffineTransform transform = new AffineTransform();
+        transform.translate(x, y);
+        transform.rotate(angle, width / 2.0, height / 2.0);
+
+        return transform.createTransformedShape(bounds);
     }
 
 }
