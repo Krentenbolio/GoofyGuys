@@ -92,12 +92,14 @@ class Target extends JLabel {
 class Character extends JLabel implements ActionListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private BufferedImage characterImage;
+
     private double x = screenSize.width / 2;
     private double y = screenSize.height / 2;
     private double newX;
     private double newY;
     private double angle = 40;
     private double speed = screenSize.height / 100; //Player speed
+
     private int stopCloseMovement = 10;
     private double scale = 0.2 * (screenSize.width / 1920.000);
     private Timer refresh;
@@ -170,6 +172,7 @@ class Character extends JLabel implements ActionListener {
     }
 
     private Rectangle[] walls = new Rectangle[] {
+
         // all walls are ordered by location on the frame.
         // to the right of each rectangle there are
         // coordinates,
@@ -222,6 +225,7 @@ class Character extends JLabel implements ActionListener {
         new Rectangle(5*screenSize.width/6, screenSize.height/4, screenSize.width/12, screenSize.height/80), // (5/6, 1/4, 1/12, 1/80)
         new Rectangle(5*screenSize.width/6, 5*screenSize.height/8, screenSize.width/12, screenSize.height/80), // (5/6, 5/8, 1/12, 1/80)
         new Rectangle(11*screenSize.width/12, 7*screenSize.height/16, screenSize.width/12, screenSize.height/80), // (11/12, 7/16, 1/12, 1/80)
+
 
     };
 
