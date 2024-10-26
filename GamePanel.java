@@ -20,6 +20,8 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean dummyAlive = true;
     public boolean dummy1Alive = true;
     public boolean dummy2Alive = true;
+    private int countdownTime = 20;
+    boolean notEnd = true;
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
@@ -59,6 +61,13 @@ public class GamePanel extends JPanel implements Runnable {
         refresh.start();
     }
 
+    public void setCountdownTime(int time) {
+        if (notEnd == true) {
+            this.countdownTime = time;
+            repaint();
+        }
+    }
+
     @Override
     public void run() {
 
@@ -96,8 +105,6 @@ public class GamePanel extends JPanel implements Runnable {
             for (Rectangle wall : walls.getWalls()) {
                 if (hitbox.intersects(wall)) {
                     System.out.println("Collision detected! Stopping the game.");
-                    JOptionPane.showMessageDialog(this, "You Lost!",
-                         "Game Over", JOptionPane.PLAIN_MESSAGE); // adds a game over frame.
                     stopGame();
                     break;
                 }
@@ -122,15 +129,21 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         if (dummyAlive == false && dummy1Alive == false && dummy2Alive == false) {
+            notEnd = false;
             JOptionPane.showMessageDialog(this, "You Win!!!",
-                 "Winner", JOptionPane.PLAIN_MESSAGE);  // adds a win frame.
-            stopGame();
+                    "Winner", JOptionPane.PLAIN_MESSAGE); // adds a win frame.
+            gameThread = null;
+            refresh.stop();
         }
     }
 
     public void stopGame() {
+        notEnd = false;
+        JOptionPane.showMessageDialog(this, "You Lost!",
+                "Game Over", JOptionPane.PLAIN_MESSAGE);
         gameThread = null;
         refresh.stop();
+
     }
 
     public void paintComponent(Graphics g) {
@@ -151,6 +164,9 @@ public class GamePanel extends JPanel implements Runnable {
         }
         player.draw(g2d);
 
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.BOLD, 20));
+        g2d.drawString("Time Left: " + countdownTime + "s", 10, 20);
 
         /*
          * Shape hitbox = dummyHitbox.getTransformedCharacterBounds();
