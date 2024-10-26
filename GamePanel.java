@@ -1,4 +1,8 @@
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -92,6 +96,8 @@ public class GamePanel extends JPanel implements Runnable {
             for (Rectangle wall : walls.getWalls()) {
                 if (hitbox.intersects(wall)) {
                     System.out.println("Collision detected! Stopping the game.");
+                    JOptionPane.showMessageDialog(this, "You Lost!",
+                         "Game Over", JOptionPane.PLAIN_MESSAGE); // adds a game over frame.
                     stopGame();
                     break;
                 }
@@ -116,6 +122,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         if (dummyAlive == false && dummy1Alive == false && dummy2Alive == false) {
+            JOptionPane.showMessageDialog(this, "You Win!!!",
+                 "Winner", JOptionPane.PLAIN_MESSAGE);  // adds a win frame.
             stopGame();
         }
     }
@@ -142,6 +150,8 @@ public class GamePanel extends JPanel implements Runnable {
             dummy2.draw(g2d);
         }
         player.draw(g2d);
+
+
         /*
          * Shape hitbox = dummyHitbox.getTransformedCharacterBounds();
          * if (hitbox != null) {
