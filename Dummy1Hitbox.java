@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
+/*
+ * Creates the dummy's hitbox.
+ */
+
 public class Dummy1Hitbox extends Entity {
 
     Dummy1 dummy1;
