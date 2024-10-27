@@ -12,6 +12,11 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+/*
+ * Creates the GamePanel with the JPanel.
+ * Updates and draws all the characters, walls etc. 
+ */
+
 public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;

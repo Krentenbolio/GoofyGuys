@@ -1,3 +1,7 @@
+/*
+ * Handles the timer.
+ */
+
 public class Refresh extends Thread {
     private GamePanel gp;
 
@@ -7,10 +11,9 @@ public class Refresh extends Thread {
 
     @Override
     public void run() {
-        int countdown = 20;
+        int countdown = 15;
         while (countdown > -1) {
             gp.setCountdownTime(countdown);
-            System.out.println(countdown);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

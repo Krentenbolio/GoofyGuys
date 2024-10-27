@@ -8,6 +8,10 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import java.util.ArrayList;
 
+/*
+ * Creates the Player.
+ */
+
 public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;

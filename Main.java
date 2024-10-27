@@ -1,6 +1,20 @@
 import java.awt.*;
 import javax.swing.JFrame;
 
+/*
+ * This is to make the frame and move the mouse to the middle.
+ */
+/**
+ * Test UniversalAutomaton.
+ * 
+ * TODO 3: Fill in your names and student IDs
+ * 
+ * @author Tim van Kollenburg
+ * @id 2110105
+ * @author Lars Weeber
+ * @id 2109506
+ */
+
 public class Main {
 
     public static void main(String[] args) {

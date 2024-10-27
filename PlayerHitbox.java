@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
+/*
+ * Creates the players hitbox.
+ */
+
 public class PlayerHitbox extends Entity {
 
     Player player;

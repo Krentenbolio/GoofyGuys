@@ -7,6 +7,10 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+/*
+ * Creates the dummy.
+ */
+
 public class Dummy extends Entity {
     GamePanel gp;
 
